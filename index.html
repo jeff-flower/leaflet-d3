@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title Goes Here</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@0.7.7/dist/leaflet.css" />
+    <!-- Needed for filter -->
+    <link rel="stylesheet" href="filter/leaflet-tag-filter-button.css" />
+
+    <link rel="stylesheet" href="styles/app.css" />
+  </head>
+
+
+
+
+  <body>
+    <label for="locationSearch">Enter Location:</label> <input type="text" id="locationSearch" placeholder="Enter Address, Zip Code, or City, State">
+    <button id="queryButton">Submit Query</button>
+    <div id="mapid"></div>
+
+    <!-- Dependencies -->
+    <script src="https://unpkg.com/leaflet@0.7.7/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/4.14.1/lodash.js"></script>
+
+    <!-- Examples from D3 Tips and Tricks book -->
+    <!-- <script src="scripts/tips_and_tricks/rectangle.js"></script> -->
+    <!-- <script src="scripts/tips_and_tricks/circles.js"></script> -->
+    <script src="scripts/atm_locations.js"></script>
+
+    <!-- ATM Location Code -->
+    <script src="scripts/filter/leaflet-tag-filter-button.js"></script>
+
+
+  </body>
+
+</html>
