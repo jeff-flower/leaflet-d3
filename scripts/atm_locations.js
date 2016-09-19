@@ -53,7 +53,7 @@ function placeMarkers(url) {
 
     // create atm marker circles
     var feature = g.selectAll('circle').data(locations);
-    
+
     // remove exiting nodes
     feature.exit().remove();
 
@@ -108,13 +108,28 @@ function placeMarkers(url) {
     }
 
     function showTooltip(d) {
+      // d is the data from the circle object that was clicked
+      // we want to use the LatLng object from the circle to locate the
+      // the tooltip
+
+      var location = d.LatLng;
+      
       div.transition()
         .duration(500)
         .style("opacity", 0.9);
-      div.html(d.name)
-        .style("left", (d3.event.pageX) + "px")
-        .style("top", (d3.event.pageY) + "px");
+
+      div.data([{LatLng: location}])
+        .html(d.name)
+        .style("left", function(tooltipData){
+          var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
+          return p.x + "px";
+        })
+        .style("top", function(tooltipData){
+          var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
+          return p.y + "px";
+        });
     }
+
 
   });
 }
