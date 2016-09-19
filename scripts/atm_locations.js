@@ -72,9 +72,24 @@ function placeMarkers(url) {
     // call reset to position markers
     reset();
 
-    mymap.on("viewreset", reset);
+    mymap.on("viewreset", resetView);
 
     /***** Helper Functions *****/
+
+    function resetView(){
+      // on view reset need to update the position of each circle
+      // and the position of the tooltip
+      div.style("left", function(tooltipData){
+        var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
+        return p.x + "px";
+      })
+        .style("top", function(tooltipData){
+          var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
+          return p.y + "px";
+        });
+
+      reset();
+    }
 
     function reset() {
       // put markers at the correct position
@@ -113,7 +128,7 @@ function placeMarkers(url) {
       // the tooltip
 
       var location = d.LatLng;
-      
+
       div.transition()
         .duration(500)
         .style("opacity", 0.9);
@@ -129,7 +144,6 @@ function placeMarkers(url) {
           return p.y + "px";
         });
     }
-
 
   });
 }
