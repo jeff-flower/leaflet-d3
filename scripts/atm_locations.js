@@ -1,7 +1,7 @@
 var mymap = L.map('mapid');
 var url = '/locations?q=';
 var mapCenter = null; // store the center of the map as leaflet LatLng object for calculating distance moved when dragging
-var centerOffset = {x: 0, y: 0};
+var centerOffset = null;
 
 var circleOpacity = 0.6;
 var circleHoverOpacity = 0.8;
@@ -43,6 +43,9 @@ function centerMap(center){
 }
 
 function placeMarkers(url) {
+  // initialize centerOffset
+  centerOffset = {x: 0, y: 0};
+
   d3.json(url, function(data) {
     var locations = data.locations;
 
