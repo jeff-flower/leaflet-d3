@@ -24,8 +24,7 @@ var g   = svg.append("g");
 
 // Add tooltip
 var div = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
+    .attr("class", "tooltip");
 
 d3.select("#queryButton").on("click", queryAndPlace);
 
@@ -45,6 +44,9 @@ function centerMap(center){
 function placeMarkers(url) {
   // initialize centerOffset
   centerOffset = {x: 0, y: 0};
+  
+  // make sure tooltip is hidden
+  div.style('opacity', 0);
 
   d3.json(url, function(data) {
     var locations = data.locations;
