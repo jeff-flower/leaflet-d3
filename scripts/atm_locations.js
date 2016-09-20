@@ -79,6 +79,16 @@ function placeMarkers(url) {
       mapCenter = mymap.getCenter();
     });
     mymap.on("dragend", function(){
+      // update centerOffset
+      updateCenter();
+
+      // update tooltip location
+      resetTooltip();
+    });
+
+    /***** Helper Functions *****/
+
+    function updateCenter() {
       // get old map center as pixels
       var oldCenter = mymap.latLngToLayerPoint(mapCenter);
 
@@ -95,12 +105,7 @@ function placeMarkers(url) {
       // update offsetCenter
       centerOffset.x = centerOffset.x + xDiff;
       centerOffset.y = centerOffset.y + yDiff;
-
-      // update tooltip location
-      resetTooltip();
-    });
-
-    /***** Helper Functions *****/
+    }
 
     function resetView(){
       // on view reset need to update the position of each circle
