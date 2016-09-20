@@ -1,6 +1,7 @@
 var mymap = L.map('mapid');
 var url = '/locations?q=';
 var mapCenter = null; // store the center of the map as leaflet LatLng object for calculating distance moved when dragging
+var centerOffset = {x: 0, y: 0};
 
 var circleOpacity = 0.6;
 var circleHoverOpacity = 0.8;
@@ -86,26 +87,17 @@ function placeMarkers(url) {
 
       // get new map center as pixels
       var newCenter = mymap.latLngToLayerPoint(mapCenter);
-      console.log('old: ' + oldCenter);
-      console.log('new: ' + newCenter);
 
       // calculate amount moved
       var xDiff = oldCenter.x - newCenter.x;
       var yDiff = oldCenter.y - newCenter.y;
 
+      // update offsetCenter
+      centerOffset.x = centerOffset.x + xDiff;
+      centerOffset.y = centerOffset.y + yDiff;
+
       // update tooltip location
-      div.style("left", function(tooltipData){
-        var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
-        var newLeft = p.x + xDiff;
-        console.log('xDiff: ' + xDiff + ' newLeft: ' + newLeft);
-        return newLeft + "px";
-      })
-        .style("top", function(tooltipData){
-          var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
-          var newTop = p.y + yDiff;
-          console.log('yDiff: ' + yDiff + ' newTop: ' + newTop);
-          return newTop + "px";
-        });
+      resetTooltip();
     });
 
     /***** Helper Functions *****/
@@ -130,13 +122,14 @@ function placeMarkers(url) {
     function resetTooltip() {
       div.style("left", function(tooltipData){
         var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
-        return p.x + "px";
+        var newLeft = p.x + centerOffset.x;
+        return newLeft + "px";
       })
         .style("top", function(tooltipData){
           var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
-          return p.y + "px";
+          var newTop = p.y + centerOffset.y;
+          return newTop + "px";
         });
-
     }
 
     function resize(d) {
