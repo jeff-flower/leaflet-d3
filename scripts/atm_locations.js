@@ -1,5 +1,6 @@
 var mymap = L.map('mapid');
 var url = '/locations?q=';
+var mapCenter = null; // store the center of the map as leaflet LatLng object for calculating distance moved when dragging
 
 var circleOpacity = 0.6;
 var circleHoverOpacity = 0.8;
@@ -73,22 +74,47 @@ function placeMarkers(url) {
     reset();
 
     mymap.on("viewreset", resetView);
+    mymap.on("dragstart", function(e){
+      mapCenter = mymap.getCenter();
+    });
+    mymap.on("dragend", function(){
+      // get old map center as pixels
+      var oldCenter = mymap.latLngToLayerPoint(mapCenter);
+
+      // update global variable mapCenter
+      mapCenter = mymap.getCenter();
+
+      // get new map center as pixels
+      var newCenter = mymap.latLngToLayerPoint(mapCenter);
+      console.log('old: ' + oldCenter);
+      console.log('new: ' + newCenter);
+
+      // calculate amount moved
+      var xDiff = oldCenter.x - newCenter.x;
+      var yDiff = oldCenter.y - newCenter.y;
+
+      // update tooltip location
+      div.style("left", function(tooltipData){
+        var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
+        var newLeft = p.x + xDiff;
+        console.log('xDiff: ' + xDiff + ' newLeft: ' + newLeft);
+        return newLeft + "px";
+      })
+        .style("top", function(tooltipData){
+          var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
+          var newTop = p.y + yDiff;
+          console.log('yDiff: ' + yDiff + ' newTop: ' + newTop);
+          return newTop + "px";
+        });
+    });
 
     /***** Helper Functions *****/
 
     function resetView(){
       // on view reset need to update the position of each circle
       // and the position of the tooltip
-      div.style("left", function(tooltipData){
-        var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
-        return p.x + "px";
-      })
-        .style("top", function(tooltipData){
-          var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
-          return p.y + "px";
-        });
-
       reset();
+      resetTooltip();
     }
 
     function reset() {
@@ -99,6 +125,18 @@ function placeMarkers(url) {
           return "translate(" + p.x + "," + p.y + ")";
         })
         .attr("r", resize);
+    }
+
+    function resetTooltip() {
+      div.style("left", function(tooltipData){
+        var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
+        return p.x + "px";
+      })
+        .style("top", function(tooltipData){
+          var p = mymap.latLngToLayerPoint(tooltipData.LatLng);
+          return p.y + "px";
+        });
+
     }
 
     function resize(d) {
